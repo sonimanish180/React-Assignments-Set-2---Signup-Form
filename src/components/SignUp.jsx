@@ -16,14 +16,14 @@ export default function SignUp() {
   const [message, setMessage] = React.useState("");
   const handleName = (e) => {
     setName(e.target.value);
-    console.log(e.target.value);
+    // console.log(name.charAt(2));
   };
   const handleEmail = (e) => {
     setEmail(e.target.value);
   };
   const handleGender = (e) => {
     setGender(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
   const handlePassword = (e) => {
     setPassword(e.target.value);
@@ -32,9 +32,35 @@ export default function SignUp() {
     setPhoneNumber(e.target.value);
   };
 
+  const isAlphanumeric = (str) => {
+    let alphaNumbers = "qwertyuiopasdfghjklzxcvbnm0123456789 ";
+    for (let i = 0; i < str.length; i++) {
+      if (!alphaNumbers.includes("" + str.charAt(i))) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const getUsername = (str) => {
+    let username = "";
+    for (let i = 0; i < str.length; i++) {
+      if ("" + str.charAt(i) !== "@") {
+        username += str.charAt(i);
+      } else {
+        break;
+      }
+    }
+    return username;
+  };
+
   const handleClick = () => {
     if (!email || !password || !phoneNumber || !name) {
       setMessage("All fields are mandatory");
+      return;
+    }
+    if (!isAlphanumeric(name.toLowerCase())) {
+      setMessage("Name is not alphanumeric");
       return;
     }
     if (!email.includes("@")) {
@@ -45,7 +71,12 @@ export default function SignUp() {
       setMessage("Phone Number must contain only numbers");
       return;
     }
-    setMessage("hello username");
+    if (password.length < 6) {
+      setMessage("Password must contain atleast 6 lettersk");
+      return;
+    }
+    setMessage(`hello ${getUsername(email)}`);
+    return;
   };
   return (
     <>
